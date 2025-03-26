@@ -22,6 +22,8 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "my_print.h"
+#include "tcs32725.h"
+#include "tca9548.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -94,14 +96,28 @@ int main(void)
   MX_I2C1_Init();
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
-
+  selectTCAChannel(0);
+  TCS34725_t tcs34725_sensor;
+  tcs32725_begin(&tcs34725_sensor, TCS34725_INTEGRATIONTIME_24MS, TCS34725_GAIN_1X);
+  selectTCAChannel(1);
+  TCS34725_t tcs34725_sensor1;
+  tcs32725_begin(&tcs34725_sensor1, TCS34725_INTEGRATIONTIME_24MS, TCS34725_GAIN_1X);
+  selectTCAChannel(2);
+  TCS34725_t tcs34725_sensor2;
+  tcs32725_begin(&tcs34725_sensor2, TCS34725_INTEGRATIONTIME_24MS, TCS34725_GAIN_1X);
+  float r, g, b;
+  uint32_t count = 0;
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+	  selectTCAChannel(count % 3);
+	  getRGB(&r, &g, &b);
+	  my_printf("RGB Values from %d: R = %d, G = %d, B = %d\r\n", count%3, (int)(r), (int)(g), (int)(b));
 	  my_printf("hello world\r\n");
+	  count++;
 	  HAL_Delay(1000);
     /* USER CODE END WHILE */
 

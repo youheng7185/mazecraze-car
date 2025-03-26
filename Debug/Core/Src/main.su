@@ -1,7 +1,7 @@
 ../Core/Inc/my_print.h:17:20:my_printf	272	static
-../Core/Src/main.c:69:5:main	8	static
-../Core/Src/main.c:117:6:SystemClock_Config	88	static
-../Core/Src/main.c:163:13:MX_I2C1_Init	8	static
-../Core/Src/main.c:197:13:MX_USART1_UART_Init	8	static
-../Core/Src/main.c:230:13:MX_GPIO_Init	24	static
-../Core/Src/main.c:254:6:Error_Handler	4	static,ignoring_inline_asm
+../Core/Src/main.c:71:5:main	48	static
+../Core/Src/main.c:133:6:SystemClock_Config	88	static
+../Core/Src/main.c:179:13:MX_I2C1_Init	8	static
+../Core/Src/main.c:213:13:MX_USART1_UART_Init	8	static
+../Core/Src/main.c:246:13:MX_GPIO_Init	24	static
+../Core/Src/main.c:270:6:Error_Handler	4	static,ignoring_inline_asm
