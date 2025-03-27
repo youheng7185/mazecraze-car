@@ -61,7 +61,7 @@ main-build: mazecrase-car.elf secondary-outputs
 
 # Tool invocations
 mazecrase-car.elf mazecrase-car.map: $(OBJS) $(USER_OBJS) /home/lapchong/STM32CubeIDE/workspace_1.18.0/mazecrase-car/STM32F411CEUX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "mazecrase-car.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"/home/lapchong/STM32CubeIDE/workspace_1.18.0/mazecrase-car/STM32F411CEUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="mazecrase-car.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+	arm-none-eabi-gcc -o "mazecrase-car.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"/home/lapchong/STM32CubeIDE/workspace_1.18.0/mazecrase-car/STM32F411CEUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="mazecrase-car.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
