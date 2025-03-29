@@ -60,6 +60,16 @@ extern I2C_HandleTypeDef hi2c2;
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
+#define a_h2_Pin GPIO_PIN_12
+#define a_h2_GPIO_Port GPIOB
+#define a_h1_Pin GPIO_PIN_13
+#define a_h1_GPIO_Port GPIOB
+#define b_h2_Pin GPIO_PIN_14
+#define b_h2_GPIO_Port GPIOB
+#define b_h1_Pin GPIO_PIN_15
+#define b_h1_GPIO_Port GPIOB
+#define motor_stdby_Pin GPIO_PIN_10
+#define motor_stdby_GPIO_Port GPIOA
 
 /* USER CODE BEGIN Private defines */
 

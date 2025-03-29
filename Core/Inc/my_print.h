@@ -12,7 +12,6 @@
 #include <string.h>
 #include <stdlib.h>
 
-extern UART_HandleTypeDef huart1;
 /*
 static inline void my_printf(const char *format, ...)
 {
