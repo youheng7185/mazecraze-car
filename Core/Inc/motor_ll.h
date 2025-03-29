@@ -22,5 +22,6 @@ typedef enum {
 
 void motor_control(motor_id_t motor_id, motor_direction_t motor_direction);
 void motor_set_speed(motor_id_t motor_id, uint8_t speed);
+void encoder_get_tick(motor_id_t motor_id, int32_t *tick);
 
 #endif /* INC_MOTOR_LL_H_ */

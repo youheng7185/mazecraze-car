@@ -145,6 +145,9 @@ int main(void)
   uint8_t speed = 25;
   motor_direction_t dir_A = REVERSE;
   motor_direction_t dir_B = FORWARD;
+  int32_t tick_m_a = 0, tick_m_b = 0;
+  int16_t tick_m_a_short = 0, tick_m_b_short = 0;
+
   //lsm6dsl_read_data_polling();
   /* USER CODE END 2 */
 
@@ -163,6 +166,14 @@ int main(void)
 
       motor_control(MOTOR_A, dir_A);
       motor_control(MOTOR_B, dir_B);
+
+      encoder_get_tick(MOTOR_A, &tick_m_a);
+      encoder_get_tick(MOTOR_B, &tick_m_b);
+
+      tick_m_a_short = (int16_t)(tick_m_a);  // Direct cast
+      tick_m_b_short = (int16_t)(tick_m_b);  // Direct cast
+
+      my_printf("motor a tick: %d, motor b tick: %d\r\n", tick_m_a_short, tick_m_b_short);
 
       HAL_Delay(1000);
 
@@ -441,7 +452,7 @@ static void MX_TIM5_Init(void)
   htim5.Instance = TIM5;
   htim5.Init.Prescaler = 0;
   htim5.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim5.Init.Period = 4294967295;
+  htim5.Init.Period = 65535;
   htim5.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim5.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   sConfig.EncoderMode = TIM_ENCODERMODE_TI1;

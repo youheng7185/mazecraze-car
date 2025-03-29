@@ -9,6 +9,8 @@ void motor_init()
 	  __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, 0);
 	  __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_2, 0); // make it stop
 	  HAL_GPIO_WritePin(GPIOA, motor_stdby_Pin, GPIO_PIN_SET); // make standby pin high, activate the motor driver
+	  HAL_TIM_Encoder_Start(&htim4, TIM_CHANNEL_ALL);
+	  HAL_TIM_Encoder_Start(&htim5, TIM_CHANNEL_ALL);
 }
 
 void motor_control(motor_id_t motor_id, motor_direction_t motor_direction)
@@ -84,6 +86,24 @@ void motor_set_speed(motor_id_t motor_id, uint8_t speed)
 		break;
 	default:
 		break;
+	}
+}
+
+void encoder_get_tick(motor_id_t motor_id, int32_t *tick)
+{
+	if (tick == NULL) return;
+
+	switch(motor_id)
+	{
+		case MOTOR_A:
+			*tick = __HAL_TIM_GET_COUNTER(&htim4);
+			break;
+		case MOTOR_B:
+			*tick = __HAL_TIM_GET_COUNTER(&htim5);
+			break;
+		default:
+			*tick = 0;
+			break;
 	}
 }
 
