@@ -27,6 +27,7 @@
 #include "tca9548.h"
 #include "lsm6dsl_hal.h"
 #include "usbd_cdc_if.h"
+#include "motor_ll.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -36,7 +37,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-#define BUFFER_LEN 128
+
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -53,8 +54,7 @@ TIM_HandleTypeDef htim4;
 TIM_HandleTypeDef htim5;
 
 /* USER CODE BEGIN PV */
-uint8_t tx_buffer[BUFFER_LEN];
-uint16_t usbTxLength;
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -71,19 +71,7 @@ static void MX_TIM5_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-void my_printf(const char *format, ...)
-{
-    char tx_buffer[BUFFER_LEN];
-    va_list args;
-    va_start(args, format);
-    int usbTxLength = vsnprintf(tx_buffer, BUFFER_LEN, format, args);
-    va_end(args);
 
-    if (usbTxLength > 0 && usbTxLength < BUFFER_LEN)
-    {
-        CDC_Transmit_FS((uint8_t *)tx_buffer, usbTxLength);
-    }
-}
 /* USER CODE END 0 */
 
 /**
@@ -123,15 +111,15 @@ int main(void)
   MX_USB_DEVICE_Init();
   /* USER CODE BEGIN 2 */
 
-  HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
-  HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2);
-  __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, 49);
-  __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_2, 49);
-  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_13, GPIO_PIN_SET);  // PB13 HIGH
-  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, GPIO_PIN_RESET); // PB12 LOW
-  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, GPIO_PIN_SET);  // PB13 HIGH
-  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_15, GPIO_PIN_RESET); // PB12 LOW
-  HAL_GPIO_WritePin(GPIOA, motor_stdby_Pin, GPIO_PIN_SET); // make standby pin high, activate the motor driver
+//  HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
+//  HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2);
+//  __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, 49);
+//  __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_2, 49);
+//  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_13, GPIO_PIN_SET);  // PB13 HIGH
+//  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, GPIO_PIN_RESET); // PB12 LOW
+//  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, GPIO_PIN_SET);  // PB13 HIGH
+//  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_15, GPIO_PIN_RESET); // PB12 LOW
+//  HAL_GPIO_WritePin(GPIOA, motor_stdby_Pin, GPIO_PIN_SET); // make standby pin high, activate the motor driver
 
 
   selectTCAChannel(0);
@@ -153,7 +141,10 @@ int main(void)
   HAL_I2C_Master_Receive(&hi2c2, 0x6B << 1, &dev_id, 1, 100);
   my_printf("my id: %d", dev_id);
 
-
+  motor_init();
+  uint8_t speed = 25;
+  motor_direction_t dir_A = REVERSE;
+  motor_direction_t dir_B = FORWARD;
   //lsm6dsl_read_data_polling();
   /* USER CODE END 2 */
 
@@ -167,6 +158,20 @@ int main(void)
 //	  my_printf("hello world\r\n");
 //	  count++;
 //	  HAL_Delay(1000);
+      motor_set_speed(MOTOR_A, speed);
+      motor_set_speed(MOTOR_B, speed);
+
+      motor_control(MOTOR_A, dir_A);
+      motor_control(MOTOR_B, dir_B);
+
+      HAL_Delay(1000);
+
+      // Toggle direction
+      dir_A = (dir_A == FORWARD) ? REVERSE : FORWARD;
+      dir_B = (dir_B == FORWARD) ? REVERSE : FORWARD;
+
+      // Toggle speed between 25 and 50
+      speed = (speed == 25) ? 40 : 25;
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

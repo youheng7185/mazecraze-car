@@ -1,6 +1,7 @@
 "./Core/Src/lsm6dsl_hal.o"
 "./Core/Src/lsm6dsl_reg.o"
 "./Core/Src/main.o"
+"./Core/Src/motor_ll.o"
 "./Core/Src/stm32f4xx_hal_msp.o"
 "./Core/Src/stm32f4xx_it.o"
 "./Core/Src/syscalls.o"
