@@ -1,4 +1,3 @@
-../Core/Inc/my_print.h:17:20:my_printf	272	static
 /opt/st/stm32cubeide_1.18.0/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.13.3.rel1.linux64_1.0.0.202410170706/tools/arm-none-eabi/include/math.h:394:14:powf	24	static
 ../Core/Src/tcs32725.c:50:6:tcs34725_write8	32	static
 ../Core/Src/tcs32725.c:71:9:read8	32	static

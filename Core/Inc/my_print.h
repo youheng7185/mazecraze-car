@@ -13,7 +13,7 @@
 #include <stdlib.h>
 
 extern UART_HandleTypeDef huart1;
-
+/*
 static inline void my_printf(const char *format, ...)
 {
     char buffer[256];  // Adjust size as needed
@@ -24,6 +24,6 @@ static inline void my_printf(const char *format, ...)
 
     HAL_UART_Transmit(&huart1, (uint8_t *)buffer, strlen(buffer), HAL_MAX_DELAY);
 }
-
+*/
 
 #endif //MY_PRINT_H

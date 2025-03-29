@@ -1,5 +1,4 @@
-../Core/Inc/my_print.h:17:20:my_printf	272	static
-../Core/Src/lsm6dsl_hal.c:30:6:lsm6dsl_read_data_polling	64	static
-../Core/Src/lsm6dsl_hal.c:129:16:platform_write	40	static
-../Core/Src/lsm6dsl_hal.c:136:16:platform_read	40	static
-../Core/Src/lsm6dsl_hal.c:144:13:platform_delay	16	static
+../Core/Src/lsm6dsl_hal.c:29:6:lsm6dsl_read_data_polling	48	static
+../Core/Src/lsm6dsl_hal.c:128:16:platform_write	40	static
+../Core/Src/lsm6dsl_hal.c:135:16:platform_read	40	static
+../Core/Src/lsm6dsl_hal.c:143:13:platform_delay	16	static
