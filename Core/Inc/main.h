@@ -64,6 +64,10 @@ extern TIM_HandleTypeDef htim5;
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
+#define trig_1_Pin GPIO_PIN_3
+#define trig_1_GPIO_Port GPIOA
+#define trig_2_Pin GPIO_PIN_4
+#define trig_2_GPIO_Port GPIOA
 #define a_h2_Pin GPIO_PIN_12
 #define a_h2_GPIO_Port GPIOB
 #define a_h1_Pin GPIO_PIN_13
