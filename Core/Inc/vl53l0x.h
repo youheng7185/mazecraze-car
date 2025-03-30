@@ -10,8 +10,6 @@ typedef enum
 {
     VL53L0X_IDX_FIRST,
     VL53L0X_IDX_SECOND,
-    VL53L0X_IDX_THIRD,
-    VL53L0X_IDX_FOURTH,
 } vl53l0x_idx_t;
 
 /**

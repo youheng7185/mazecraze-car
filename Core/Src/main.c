@@ -28,6 +28,7 @@
 #include "lsm6dsl_hal.h"
 #include "usbd_cdc_if.h"
 #include "motor_ll.h"
+#include "vl53l0x.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -151,6 +152,8 @@ int main(void)
   int32_t tick_m_a = 0, tick_m_b = 0;
   int16_t tick_m_a_short = 0, tick_m_b_short = 0;
 
+  vl53l0x_init();
+  uint16_t range_a = 0, range_b = 0;
   //lsm6dsl_read_data_polling();
   /* USER CODE END 2 */
 
@@ -158,6 +161,10 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+	  vl53l0x_read_range_single(0, &range_a);
+	  vl53l0x_read_range_single(1, &range_b);
+	  my_printf("vl53l0x 0: %d, vl53lox 1: %d\r\n", range_a, range_b);
+
 	  selectTCAChannel(count % 3);
 	  getRGB(&r, &g, &b);
 	  my_printf("RGB Values from %d: R = %d, G = %d, B = %d\r\n", count%3, (int)(r), (int)(g), (int)(b));

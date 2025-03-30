@@ -1,6 +1,7 @@
 #include "vl53l0x.h"
 #include "main.h"
 #include "my_print.h"
+#include "tca9548.h"
 
 #define REG_IDENTIFICATION_MODEL_ID (0xC0)
 #define REG_VHV_CONFIG_PAD_SCL_SDA_EXTSUP_HV (0x89)
@@ -48,10 +49,12 @@
  * offset to the aperture quadrant is (256 - 64 - 180) = 12 */
 #define SPAD_APERTURE_START_INDEX (12)
 
+#define VL53L0X_MUX_CHANNEL_FIRST (3)
+#define VL53L0X_MUX_CHANNEL_SECOND (4)
+
 typedef struct vl53l0x_info
 {
-    uint8_t addr;
-    uint16_t xshut_gpio;
+	uint8_t mux_channel;
 } vl53l0x_info_t;
 
 typedef enum
@@ -62,8 +65,8 @@ typedef enum
 
 static const vl53l0x_info_t vl53l0x_infos[] =
 {
-    [VL53L0X_IDX_FIRST] = { .addr = 0x30, .xshut_gpio = GPIO_XSHUT_FIRST },
-    [VL53L0X_IDX_SECOND] = { .addr = 0x31, .xshut_gpio = GPIO_XSHUT_SECOND },
+    [VL53L0X_IDX_FIRST] = { .mux_channel = VL53L0X_MUX_CHANNEL_FIRST },
+    [VL53L0X_IDX_SECOND] = { .mux_channel = VL53L0X_MUX_CHANNEL_SECOND },
 };
 
 static uint8_t stop_variable = 0;
@@ -74,18 +77,12 @@ static uint8_t stop_variable = 0;
 
 extern I2C_HandleTypeDef hi2c1;
 
-uint8_t i2c_addr = 0;
-
-void i2c_set_slave_address(uint8_t addr) {
-    i2c_addr = addr;
-}
-
 bool i2c_read_addr8_data8(uint8_t addr, uint8_t *data) {
-    if (HAL_I2C_Master_Transmit(&hi2c1, i2c_addr << 1, &addr, 1, HAL_MAX_DELAY) != HAL_OK) {
+    if (HAL_I2C_Master_Transmit(&hi2c1, VL53L0X_DEFAULT_ADDRESS << 1, &addr, 1, HAL_MAX_DELAY) != HAL_OK) {
         my_printf("[I2C] ERROR: Transmit failed i2c_read_addr8_data8 (register 0x%X)\r\n", addr);
         return false;
     }
-    if (HAL_I2C_Master_Receive(&hi2c1, i2c_addr << 1, data, 1, HAL_MAX_DELAY) != HAL_OK) {
+    if (HAL_I2C_Master_Receive(&hi2c1, VL53L0X_DEFAULT_ADDRESS << 1, data, 1, HAL_MAX_DELAY) != HAL_OK) {
         my_printf("[I2C] ERROR: Receive failed i2c_read_addr8_data8 (register 0x%X)\r\n", addr);
         return false;
     }
@@ -93,12 +90,12 @@ bool i2c_read_addr8_data8(uint8_t addr, uint8_t *data) {
 }
 
 bool i2c_read_addr8_data16(uint8_t addr, uint16_t *data) {
-    if (HAL_I2C_Master_Transmit(&hi2c1, i2c_addr << 1, &addr, 1, HAL_MAX_DELAY) != HAL_OK) {
+    if (HAL_I2C_Master_Transmit(&hi2c1, VL53L0X_DEFAULT_ADDRESS << 1, &addr, 1, HAL_MAX_DELAY) != HAL_OK) {
         my_printf("[I2C] ERROR: Transmit failed i2c_read_addr8_data16 (register 0x%X)\r\n", addr);
         return false;
     }
     uint8_t buf[2];
-    if (HAL_I2C_Master_Receive(&hi2c1, i2c_addr << 1, buf, 2, HAL_MAX_DELAY) != HAL_OK) {
+    if (HAL_I2C_Master_Receive(&hi2c1, VL53L0X_DEFAULT_ADDRESS << 1, buf, 2, HAL_MAX_DELAY) != HAL_OK) {
         my_printf("[I2C] ERROR: Receive failed i2c_read_addr8_data16 (register 0x%X)\r\n", addr);
         return false;
     }
@@ -108,20 +105,20 @@ bool i2c_read_addr8_data16(uint8_t addr, uint16_t *data) {
 
 bool i2c_write_addr8_data8(uint8_t addr, uint8_t data) {
     uint8_t buf[2] = {addr, data};
-    if (HAL_I2C_Master_Transmit(&hi2c1, i2c_addr << 1, buf, 2, HAL_MAX_DELAY) != HAL_OK) {
-        my_printf("[I2C] ERROR: Write failed i2c_write_addr8_data8 (register 0x%X) on device 0x%X\r\n", addr, i2c_addr);
+    if (HAL_I2C_Master_Transmit(&hi2c1, VL53L0X_DEFAULT_ADDRESS << 1, buf, 2, HAL_MAX_DELAY) != HAL_OK) {
+        my_printf("[I2C] ERROR: Write failed i2c_write_addr8_data8 (register 0x%X) on device 0x%X\r\n", addr, VL53L0X_DEFAULT_ADDRESS);
         return false;
     }
     return true;
 }
 
 bool i2c_read_addr8_data32(uint8_t addr, uint32_t *data) {
-    if (HAL_I2C_Master_Transmit(&hi2c1, i2c_addr << 1, &addr, 1, HAL_MAX_DELAY) != HAL_OK) {
+    if (HAL_I2C_Master_Transmit(&hi2c1, VL53L0X_DEFAULT_ADDRESS << 1, &addr, 1, HAL_MAX_DELAY) != HAL_OK) {
         my_printf("[I2C] ERROR: Transmit failed i2c_read_addr8_data32 (register 0x%X)\r\n", addr);
         return false;
     }
     uint8_t buf[4];
-    if (HAL_I2C_Master_Receive(&hi2c1, i2c_addr << 1, buf, 4, HAL_MAX_DELAY) != HAL_OK) {
+    if (HAL_I2C_Master_Receive(&hi2c1, VL53L0X_DEFAULT_ADDRESS << 1, buf, 4, HAL_MAX_DELAY) != HAL_OK) {
         my_printf("[I2C] ERROR: Receive failed i2c_read_addr8_data32 (register 0x%X)\r\n", addr);
         return false;
     }
@@ -134,7 +131,7 @@ bool i2c_write_addr8_bytes(uint8_t addr, const uint8_t *data, uint8_t length) {
     buf[0] = addr;
     memcpy(&buf[1], data, length);
 
-    if (HAL_I2C_Master_Transmit(&hi2c1, i2c_addr << 1, buf, length + 1, HAL_MAX_DELAY) != HAL_OK) {
+    if (HAL_I2C_Master_Transmit(&hi2c1, VL53L0X_DEFAULT_ADDRESS << 1, buf, length + 1, HAL_MAX_DELAY) != HAL_OK) {
         my_printf("[I2C] ERROR: Write failed i2c_write_addr8_bytes (register 0x%X)\r\n", addr);
         return false;
     }
@@ -142,11 +139,11 @@ bool i2c_write_addr8_bytes(uint8_t addr, const uint8_t *data, uint8_t length) {
 }
 
 bool i2c_read_addr8_bytes(uint8_t addr, uint8_t *data, uint8_t length) {
-    if (HAL_I2C_Master_Transmit(&hi2c1, i2c_addr << 1, &addr, 1, HAL_MAX_DELAY) != HAL_OK) {
+    if (HAL_I2C_Master_Transmit(&hi2c1, VL53L0X_DEFAULT_ADDRESS << 1, &addr, 1, HAL_MAX_DELAY) != HAL_OK) {
         my_printf("[I2C] ERROR: Transmit failed i2c_read_addr8_bytes (register 0x%X)\r\n", addr);
         return false;
     }
-    if (HAL_I2C_Master_Receive(&hi2c1, i2c_addr << 1, data, length, HAL_MAX_DELAY) != HAL_OK) {
+    if (HAL_I2C_Master_Receive(&hi2c1, VL53L0X_DEFAULT_ADDRESS << 1, data, length, HAL_MAX_DELAY) != HAL_OK) {
         my_printf("[I2C] ERROR: Receive failed i2c_read_addr8_bytes (register 0x%X)\r\n", addr);
         return false;
     }
@@ -612,14 +609,6 @@ static bool configure_address(uint8_t addr)
 }
 
 /**
- * Sets the sensor in hardware standby by flipping the XSHUT pin.
- */
-static void set_hardware_standby(vl53l0x_idx_t idx, bool enable)
-{
-    HAL_GPIO_WritePin(GPIOG, vl53l0x_infos[idx].xshut_gpio, enable ? GPIO_PIN_RESET : GPIO_PIN_SET);
-}
-
-/**
  * Configures the GPIOs used for the XSHUT pin.
  * Output low by default means the sensors will be in
  * hardware standby after this function is called.
@@ -636,8 +625,8 @@ static void configure_gpio()
  * in hardware standby. */
 static bool init_address(vl53l0x_idx_t idx)
 {
-    set_hardware_standby(idx, false);
-    i2c_set_slave_address(VL53L0X_DEFAULT_ADDRESS);
+    //set_hardware_standby(idx, false);
+    selectTCAChannel(vl53l0x_infos[idx].mux_channel);
     /* The datasheet doesn't say how long we must wait to leave hw standby,
      * but using the same delay as vl6180x seems to work fine. */
     HAL_Delay(1);
@@ -647,10 +636,6 @@ static bool init_address(vl53l0x_idx_t idx)
         return false;
     }
 
-    if (!configure_address(vl53l0x_infos[idx].addr)) {
-        my_printf("configure address failed\n");
-        return false;
-    }
     return true;
 }
 
@@ -676,7 +661,9 @@ static bool init_addresses()
 
 static bool init_config(vl53l0x_idx_t idx)
 {
-    i2c_set_slave_address(vl53l0x_infos[idx].addr);
+    //i2c_set_slave_address(vl53l0x_infos[idx].addr);
+	selectTCAChannel(vl53l0x_infos[idx].mux_channel);
+
     if (!data_init()) {
         return false;
     }
@@ -707,7 +694,9 @@ bool vl53l0x_init()
 
 bool vl53l0x_read_range_single(vl53l0x_idx_t idx, uint16_t *range)
 {
-    i2c_set_slave_address(vl53l0x_infos[idx].addr);
+	selectTCAChannel(vl53l0x_infos[idx].mux_channel);
+
+    //i2c_set_slave_address(vl53l0x_infos[idx].addr);
     bool success = i2c_write_addr8_data8(0x80, 0x01);
     success &= i2c_write_addr8_data8(0xFF, 0x01);
     success &= i2c_write_addr8_data8(0x00, 0x00);
