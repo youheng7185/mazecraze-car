@@ -61,9 +61,15 @@ extern I2C_HandleTypeDef hi2c2;
 extern TIM_HandleTypeDef htim1;
 extern TIM_HandleTypeDef htim4;
 extern TIM_HandleTypeDef htim5;
+
+extern SPI_HandleTypeDef hspi1;
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
+#define flow_rst_Pin GPIO_PIN_3
+#define flow_rst_GPIO_Port GPIOA
+#define flow_cs_Pin GPIO_PIN_4
+#define flow_cs_GPIO_Port GPIOA
 #define a_h2_Pin GPIO_PIN_12
 #define a_h2_GPIO_Port GPIOB
 #define a_h1_Pin GPIO_PIN_13

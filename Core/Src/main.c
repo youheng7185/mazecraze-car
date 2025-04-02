@@ -29,6 +29,7 @@
 #include "usbd_cdc_if.h"
 #include "motor_ll.h"
 #include "vl53l0x.h"
+#include "pmw3901.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -158,6 +159,9 @@ int main(void)
 
   vl53l0x_init();
   uint16_t range_a = 0, range_b = 0;
+
+  bool pmw3901_init_flag = pmw3901_begin();
+  int16_t delta_x, delta_y;
   //lsm6dsl_read_data_polling();
   /* USER CODE END 2 */
 
@@ -165,37 +169,40 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  vl53l0x_read_range_single(0, &range_a);
-	  vl53l0x_read_range_single(1, &range_b);
-	  my_printf("vl53l0x 0: %d, vl53lox 1: %d\r\n", range_a, range_b);
-
-	  selectTCAChannel(count % 3);
-	  getRGB(&r, &g, &b);
-	  my_printf("RGB Values from %d: R = %d, G = %d, B = %d\r\n", count%3, (int)(r), (int)(g), (int)(b));
-	  count++;
-
-      motor_set_speed(MOTOR_A, speed);
-      motor_set_speed(MOTOR_B, speed);
-
-      motor_control(MOTOR_A, dir_A);
-      motor_control(MOTOR_B, dir_B);
-
-      encoder_get_tick(MOTOR_A, &tick_m_a);
-      encoder_get_tick(MOTOR_B, &tick_m_b);
-
-      tick_m_a_short = (int16_t)(tick_m_a);  // Direct cast
-      tick_m_b_short = (int16_t)(tick_m_b);  // Direct cast
-
-      my_printf("motor a tick: %d, motor b tick: %d\r\n", tick_m_a_short, tick_m_b_short);
-
-      HAL_Delay(1000);
-
-      // Toggle direction
-      dir_A = (dir_A == FORWARD) ? REVERSE : FORWARD;
-      dir_B = (dir_B == FORWARD) ? REVERSE : FORWARD;
-
-      // Toggle speed between 25 and 50
-      speed = (speed == 25) ? 40 : 25;
+	  readMotionCount(&delta_x, &delta_y);
+	  my_printf("delta x: %d, delta y: %d\r\n", delta_x, delta_y);
+	  HAL_Delay(100);
+//	  vl53l0x_read_range_single(0, &range_a);
+//	  vl53l0x_read_range_single(1, &range_b);
+//	  my_printf("vl53l0x 0: %d, vl53lox 1: %d\r\n", range_a, range_b);
+//
+//	  selectTCAChannel(count % 3);
+//	  getRGB(&r, &g, &b);
+//	  my_printf("RGB Values from %d: R = %d, G = %d, B = %d\r\n", count%3, (int)(r), (int)(g), (int)(b));
+//	  count++;
+//
+//      motor_set_speed(MOTOR_A, speed);
+//      motor_set_speed(MOTOR_B, speed);
+//
+//      motor_control(MOTOR_A, dir_A);
+//      motor_control(MOTOR_B, dir_B);
+//
+//      encoder_get_tick(MOTOR_A, &tick_m_a);
+//      encoder_get_tick(MOTOR_B, &tick_m_b);
+//
+//      tick_m_a_short = (int16_t)(tick_m_a);  // Direct cast
+//      tick_m_b_short = (int16_t)(tick_m_b);  // Direct cast
+//
+//      my_printf("motor a tick: %d, motor b tick: %d\r\n", tick_m_a_short, tick_m_b_short);
+//
+//      HAL_Delay(1000);
+//
+//      // Toggle direction
+//      dir_A = (dir_A == FORWARD) ? REVERSE : FORWARD;
+//      dir_B = (dir_B == FORWARD) ? REVERSE : FORWARD;
+//
+//      // Toggle speed between 25 and 50
+//      speed = (speed == 25) ? 40 : 25;
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -335,11 +342,11 @@ static void MX_SPI1_Init(void)
   hspi1.Instance = SPI1;
   hspi1.Init.Mode = SPI_MODE_MASTER;
   hspi1.Init.Direction = SPI_DIRECTION_2LINES;
-  hspi1.Init.DataSize = SPI_DATASIZE_16BIT;
+  hspi1.Init.DataSize = SPI_DATASIZE_8BIT;
   hspi1.Init.CLKPolarity = SPI_POLARITY_LOW;
   hspi1.Init.CLKPhase = SPI_PHASE_1EDGE;
   hspi1.Init.NSS = SPI_NSS_SOFT;
-  hspi1.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_2;
+  hspi1.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_256;
   hspi1.Init.FirstBit = SPI_FIRSTBIT_MSB;
   hspi1.Init.TIMode = SPI_TIMODE_DISABLE;
   hspi1.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
@@ -613,10 +620,17 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, a_h2_Pin|a_h1_Pin|b_h2_Pin|b_h1_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, flow_rst_Pin|flow_cs_Pin|motor_stdby_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(motor_stdby_GPIO_Port, motor_stdby_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOB, a_h2_Pin|a_h1_Pin|b_h2_Pin|b_h1_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pins : flow_rst_Pin flow_cs_Pin motor_stdby_Pin */
+  GPIO_InitStruct.Pin = flow_rst_Pin|flow_cs_Pin|motor_stdby_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
   /*Configure GPIO pins : a_h2_Pin a_h1_Pin b_h2_Pin b_h1_Pin */
   GPIO_InitStruct.Pin = a_h2_Pin|a_h1_Pin|b_h2_Pin|b_h1_Pin;
@@ -624,13 +638,6 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-
-  /*Configure GPIO pin : motor_stdby_Pin */
-  GPIO_InitStruct.Pin = motor_stdby_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(motor_stdby_GPIO_Port, &GPIO_InitStruct);
 
   /* USER CODE BEGIN MX_GPIO_Init_2 */
 
