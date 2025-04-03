@@ -1,8 +1,8 @@
-../Core/Src/pmw3901.c:22:6:pmw3901_begin	3
-../Core/Src/pmw3901.c:56:6:pmw3901_register_write	1
-../Core/Src/pmw3901.c:68:9:pmw3901_register_read	1
-../Core/Src/pmw3901.c:83:6:readMotionCount	1
-../Core/Src/pmw3901.c:90:6:enableFrameBuffer	2
-../Core/Src/pmw3901.c:114:6:readFrameBuffer	6
-../Core/Src/pmw3901.c:154:6:initRegisters	1
-../Core/Src/pmw3901.c:233:6:setLed	2
+../Core/Src/pmw3901.c:36:6:pmw3901_begin	3
+../Core/Src/pmw3901.c:70:6:pmw3901_register_write	1
+../Core/Src/pmw3901.c:82:9:pmw3901_register_read	1
+../Core/Src/pmw3901.c:97:6:readMotionCount	1
+../Core/Src/pmw3901.c:104:6:enableFrameBuffer	2
+../Core/Src/pmw3901.c:128:6:readFrameBuffer	6
+../Core/Src/pmw3901.c:168:6:initRegisters	1
+../Core/Src/pmw3901.c:247:6:setLed	2

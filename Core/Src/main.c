@@ -30,6 +30,7 @@
 #include "motor_ll.h"
 #include "vl53l0x.h"
 #include "pmw3901.h"
+#include "sh1106.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -162,6 +163,14 @@ int main(void)
 
   bool pmw3901_init_flag = pmw3901_begin();
   int16_t delta_x, delta_y;
+
+  sh1106_init();
+  sh1106_setAll(0);
+  sh1106_sendBuffer();
+  sh1106_print(10, 10, "hello world");
+  sh1106_sendBuffer();
+  char oled_msg_1[20];
+  char oled_msg_2[20];
   //lsm6dsl_read_data_polling();
   /* USER CODE END 2 */
 
@@ -171,6 +180,12 @@ int main(void)
   {
 	  readMotionCount(&delta_x, &delta_y);
 	  my_printf("delta x: %d, delta y: %d\r\n", delta_x, delta_y);
+	  sh1106_setAll(0);
+	  sprintf(oled_msg_1, "d_x: %d", delta_x);
+	  sprintf(oled_msg_2, "d_y: %d", delta_y);
+	  sh1106_print(10, 10, oled_msg_1);
+	  sh1106_print(10, 20, oled_msg_2);
+	  sh1106_sendBuffer();
 	  HAL_Delay(100);
 //	  vl53l0x_read_range_single(0, &range_a);
 //	  vl53l0x_read_range_single(1, &range_b);
