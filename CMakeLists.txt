@@ -48,11 +48,20 @@ target_link_directories(${CMAKE_PROJECT_NAME} PRIVATE
 # Add sources to executable
 target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     # Add user sources here
+    Core/Src/main.c
+    Core/Src/tca9548a.c
+    Core/Src/tcs32725.c
+    Core/Src/motor_ll.c
+    Core/Src/vl53l0x.c
+    Core/Src/sh1106.c
+    Core/Src/lsm6dsl_hal.c
+    Core/Src/lsm6dsl_reg.c
 )
 
 # Add include paths
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
     # Add user defined include paths
+    Core/Inc
 )
 
 # Add project symbols (macros)
