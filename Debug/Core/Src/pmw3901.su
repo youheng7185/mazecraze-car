@@ -1,8 +1,0 @@
-../Core/Src/pmw3901.c:36:6:pmw3901_begin	16	static
-../Core/Src/pmw3901.c:70:6:pmw3901_register_write	24	static
-../Core/Src/pmw3901.c:82:9:pmw3901_register_read	24	static
-../Core/Src/pmw3901.c:97:6:readMotionCount	24	static
-../Core/Src/pmw3901.c:104:6:enableFrameBuffer	16	static
-../Core/Src/pmw3901.c:128:6:readFrameBuffer	40	static
-../Core/Src/pmw3901.c:168:6:initRegisters	8	static
-../Core/Src/pmw3901.c:247:6:setLed	16	static
