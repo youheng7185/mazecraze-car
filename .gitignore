@@ -1,0 +1,33 @@
+# STM32CubeIDE & general
+*.launch
+*.uvopt*
+*.uvproj*
+*.dep
+*.d
+*.o
+*.elf
+*.bin
+*.hex
+*.map
+*.lst
+*.srec
+*.log
+
+# IDE specific
+.settings/
+.cproject
+.project
+*.ide
+*.swp
+*.swo
+
+# Build directory
+build/
+Debug/
+Release/
+
+# CubeMX generated files backup
+*.ioc.backup*
+
+# STM32CubeIDE metadata
+STM32CubeIDE/.settings/
