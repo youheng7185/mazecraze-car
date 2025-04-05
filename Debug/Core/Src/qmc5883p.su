@@ -1,0 +1,5 @@
+../Core/Inc/my_print.h:20:20:my_printf	144	static
+../Core/Src/qmc5883p.c:17:6:qmc5883p_write	32	static
+../Core/Src/qmc5883p.c:23:6:qmc5883p_read	24	static
+../Core/Src/qmc5883p.c:34:6:qmc5883p_init	16	static
+../Core/Src/qmc5883p.c:52:6:qmc5883p_read_all	40	static

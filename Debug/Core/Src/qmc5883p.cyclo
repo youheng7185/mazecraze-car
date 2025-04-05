@@ -1,0 +1,5 @@
+../Core/Inc/my_print.h:20:20:my_printf	3
+../Core/Src/qmc5883p.c:17:6:qmc5883p_write	1
+../Core/Src/qmc5883p.c:23:6:qmc5883p_read	3
+../Core/Src/qmc5883p.c:34:6:qmc5883p_init	2
+../Core/Src/qmc5883p.c:52:6:qmc5883p_read_all	2

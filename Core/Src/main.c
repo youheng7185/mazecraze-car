@@ -32,6 +32,7 @@
 //#include "pmw3901.h"
 #include "sh1106.h"
 #include "pf_hal.h"
+#include "qmc5883p.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -171,6 +172,10 @@ int main(void)
   uint16_t range_a = 0, range_b = 0;
 
   //lsm6dsl_read_data_polling();
+
+  qmc5883p_init();
+  int16_t mag_x, mag_y, mag_z;
+
   HAL_Delay(1000);
   /* USER CODE END 2 */
 
@@ -193,7 +198,9 @@ int main(void)
 //	  printColour(&pf_sensor_c_colour);
 //	  HAL_Delay(100);
 
-	  I2C_Scan(&hi2c2);
+	  //I2C_Scan(&hi2c2);
+	  qmc5883p_read_all(&mag_x, &mag_y, &mag_z);
+	  my_printf("mag x: %d, y: %d, z: %d\r\n", mag_x, mag_y, mag_z);
 	  HAL_Delay(100);
 //      motor_set_speed(MOTOR_A, speed);
 //      motor_set_speed(MOTOR_B, speed);
