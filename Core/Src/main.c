@@ -77,7 +77,18 @@ static void MX_TIM11_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+void I2C_Scan(I2C_HandleTypeDef *hi2c) {
+    my_printf("Starting I2C scan on bus %s...\r\n", (hi2c == &hi2c2) ? "hi2c2" : "unknown");
 
+    for (uint8_t address = 1; address < 127; address++) {
+        // Try to transmit to the current address
+        if (HAL_I2C_IsDeviceReady(hi2c, (address << 1), 1, 10) == HAL_OK) {
+            my_printf("Found device at 0x%02X\r\n", address);
+        }
+    }
+
+    my_printf("I2C scan complete.\r\n");
+}
 /* USER CODE END 0 */
 
 /**
@@ -177,9 +188,12 @@ int main(void)
 //	  my_printf("RGB Values from %d: R = %d, G = %d, B = %d\r\n", count%3, (int)(r), (int)(g), (int)(b));
 //	  count++;
 
-	  printColour(&pf_sensor_a_colour);
-	  printColour(&pf_sensor_b_colour);
-	  printColour(&pf_sensor_c_colour);
+//	  printColour(&pf_sensor_a_colour);
+//	  printColour(&pf_sensor_b_colour);
+//	  printColour(&pf_sensor_c_colour);
+//	  HAL_Delay(100);
+
+	  I2C_Scan(&hi2c2);
 	  HAL_Delay(100);
 //      motor_set_speed(MOTOR_A, speed);
 //      motor_set_speed(MOTOR_B, speed);
