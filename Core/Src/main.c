@@ -31,6 +31,7 @@
 #include "vl53l0x.h"
 //#include "pmw3901.h"
 #include "sh1106.h"
+#include "pf_hal.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -55,6 +56,7 @@ I2C_HandleTypeDef hi2c2;
 TIM_HandleTypeDef htim1;
 TIM_HandleTypeDef htim4;
 TIM_HandleTypeDef htim5;
+TIM_HandleTypeDef htim11;
 
 /* USER CODE BEGIN PV */
 
@@ -68,6 +70,7 @@ static void MX_I2C2_Init(void);
 static void MX_TIM1_Init(void);
 static void MX_TIM4_Init(void);
 static void MX_TIM5_Init(void);
+static void MX_TIM11_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -112,6 +115,7 @@ int main(void)
   MX_TIM4_Init();
   MX_TIM5_Init();
   MX_USB_DEVICE_Init();
+  MX_TIM11_Init();
   /* USER CODE BEGIN 2 */
 
 //  HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
@@ -124,6 +128,7 @@ int main(void)
 //  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_15, GPIO_PIN_RESET); // PB12 LOW
 //  HAL_GPIO_WritePin(GPIOA, motor_stdby_Pin, GPIO_PIN_SET); // make standby pin high, activate the motor driver
 
+  HAL_TIM_Base_Start_IT(&htim11);
 
   selectTCAChannel(0);
   TCS34725_t tcs34725_sensor;
@@ -154,12 +159,8 @@ int main(void)
   vl53l0x_init();
   uint16_t range_a = 0, range_b = 0;
 
-  sh1106_init();
-  sh1106_setAll(0);
-  sh1106_sendBuffer();
-  sh1106_print(10, 10, "hello world");
-  sh1106_sendBuffer();
-  lsm6dsl_read_data_polling();
+  //lsm6dsl_read_data_polling();
+  HAL_Delay(1000);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -167,37 +168,41 @@ int main(void)
   while (1)
   {
 
-	  vl53l0x_read_range_single(0, &range_a);
-	  vl53l0x_read_range_single(1, &range_b);
-	  my_printf("vl53l0x 0: %d, vl53lox 1: %d\r\n", range_a, range_b);
+//	  vl53l0x_read_range_single(0, &range_a);
+//	  vl53l0x_read_range_single(1, &range_b);
+//	  my_printf("vl53l0x 0: %d, vl53lox 1: %d\r\n", range_a, range_b);
 
-	  selectTCAChannel(count % 3);
-	  getRGB(&r, &g, &b);
-	  my_printf("RGB Values from %d: R = %d, G = %d, B = %d\r\n", count%3, (int)(r), (int)(g), (int)(b));
-	  count++;
+//	  selectTCAChannel(count % 3);
+//	  getRGB(&r, &g, &b);
+//	  my_printf("RGB Values from %d: R = %d, G = %d, B = %d\r\n", count%3, (int)(r), (int)(g), (int)(b));
+//	  count++;
 
-      motor_set_speed(MOTOR_A, speed);
-      motor_set_speed(MOTOR_B, speed);
-
-      motor_control(MOTOR_A, dir_A);
-      motor_control(MOTOR_B, dir_B);
-
-      encoder_get_tick(MOTOR_A, &tick_m_a);
-      encoder_get_tick(MOTOR_B, &tick_m_b);
-
-      tick_m_a_short = (int16_t)(tick_m_a);  // Direct cast
-      tick_m_b_short = (int16_t)(tick_m_b);  // Direct cast
-
-      my_printf("motor a tick: %d, motor b tick: %d\r\n", tick_m_a_short, tick_m_b_short);
-
-      HAL_Delay(1000);
-
-      // Toggle direction
-      dir_A = (dir_A == FORWARD) ? REVERSE : FORWARD;
-      dir_B = (dir_B == FORWARD) ? REVERSE : FORWARD;
-
-      // Toggle speed between 25 and 50
-      speed = (speed == 25) ? 40 : 25;
+	  printColour(&pf_sensor_a_colour);
+	  printColour(&pf_sensor_b_colour);
+	  printColour(&pf_sensor_c_colour);
+	  HAL_Delay(100);
+//      motor_set_speed(MOTOR_A, speed);
+//      motor_set_speed(MOTOR_B, speed);
+//
+//      motor_control(MOTOR_A, dir_A);
+//      motor_control(MOTOR_B, dir_B);
+//
+//      encoder_get_tick(MOTOR_A, &tick_m_a);
+//      encoder_get_tick(MOTOR_B, &tick_m_b);
+//
+//      tick_m_a_short = (int16_t)(tick_m_a);  // Direct cast
+//      tick_m_b_short = (int16_t)(tick_m_b);  // Direct cast
+//
+//      my_printf("motor a tick: %d, motor b tick: %d\r\n", tick_m_a_short, tick_m_b_short);
+//
+//      HAL_Delay(1000);
+//
+//      // Toggle direction
+//      dir_A = (dir_A == FORWARD) ? REVERSE : FORWARD;
+//      dir_B = (dir_B == FORWARD) ? REVERSE : FORWARD;
+//
+//      // Toggle speed between 25 and 50
+//      speed = (speed == 25) ? 40 : 25;
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -496,6 +501,37 @@ static void MX_TIM5_Init(void)
 }
 
 /**
+  * @brief TIM11 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_TIM11_Init(void)
+{
+
+  /* USER CODE BEGIN TIM11_Init 0 */
+
+  /* USER CODE END TIM11_Init 0 */
+
+  /* USER CODE BEGIN TIM11_Init 1 */
+
+  /* USER CODE END TIM11_Init 1 */
+  htim11.Instance = TIM11;
+  htim11.Init.Prescaler = 960-1;
+  htim11.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim11.Init.Period = 10416-1;
+  htim11.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim11.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  if (HAL_TIM_Base_Init(&htim11) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN TIM11_Init 2 */
+
+  /* USER CODE END TIM11_Init 2 */
+
+}
+
+/**
   * @brief GPIO Initialization Function
   * @param None
   * @retval None
@@ -508,15 +544,26 @@ static void MX_GPIO_Init(void)
   /* USER CODE END MX_GPIO_Init_1 */
 
   /* GPIO Ports Clock Enable */
+  __HAL_RCC_GPIOC_CLK_ENABLE();
   __HAL_RCC_GPIOH_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
   __HAL_RCC_GPIOB_CLK_ENABLE();
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOB, a_h2_Pin|a_h1_Pin|b_h2_Pin|b_h1_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(motor_stdby_GPIO_Port, motor_stdby_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin : PC13 */
+  GPIO_InitStruct.Pin = GPIO_PIN_13;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
   /*Configure GPIO pins : a_h2_Pin a_h1_Pin b_h2_Pin b_h1_Pin */
   GPIO_InitStruct.Pin = a_h2_Pin|a_h1_Pin|b_h2_Pin|b_h1_Pin;

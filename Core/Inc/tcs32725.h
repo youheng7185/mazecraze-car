@@ -127,7 +127,7 @@ void     setInterrupt(bool flag);
 void     clearInterrupt(void);
 void     setIntLimits(uint16_t l, uint16_t h);
 void     enable(void);
-void     getRGB(float *r, float *g, float *b);
+void getRGB(uint8_t *r, uint8_t *g, uint8_t *b);
 
 void     disable(void);
 

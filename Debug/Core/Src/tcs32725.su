@@ -9,7 +9,7 @@
 ../Core/Src/tcs32725.c:208:6:setIntegrationTime	16	static
 ../Core/Src/tcs32725.c:226:6:setGain	16	static
 ../Core/Src/tcs32725.c:245:6:getRawData	24	static
-../Core/Src/tcs32725.c:279:6:getRGB	40	static
+../Core/Src/tcs32725.c:278:6:getRGB	40	static
 ../Core/Src/tcs32725.c:301:10:calculateColorTemperature	56	static
 ../Core/Src/tcs32725.c:334:10:calculateLux	24	static
 ../Core/Src/tcs32725.c:345:6:setInterrupt	24	static

@@ -1,0 +1,3 @@
+../Core/Inc/my_print.h:20:20:my_printf	3
+../Core/Src/pf_hal.c:11:6:HAL_TIM_PeriodElapsedCallback	2
+../Core/Src/pf_hal.c:33:6:printColour	1

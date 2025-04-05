@@ -254,29 +254,28 @@ void getRawData(uint16_t* r, uint16_t* g, uint16_t* b, uint16_t* c) {
     *b = read16(TCS34725_BDATAL);
 
     /* Set a delay for the integration time */
-    switch (_tcs34725IntegrationTime) {
-        case TCS34725_INTEGRATIONTIME_2_4MS:
-            HAL_Delay(3);
-            break;
-        case TCS34725_INTEGRATIONTIME_24MS:
-        	HAL_Delay(24);
-            break;
-        case TCS34725_INTEGRATIONTIME_50MS:
-        	HAL_Delay(50);
-            break;
-        case TCS34725_INTEGRATIONTIME_101MS:
-        	HAL_Delay(101);
-            break;
-        case TCS34725_INTEGRATIONTIME_154MS:
-        	HAL_Delay(154);
-            break;
-        case TCS34725_INTEGRATIONTIME_700MS:
-        	HAL_Delay(700);
-            break;
-    }
+//    switch (_tcs34725IntegrationTime) {
+//        case TCS34725_INTEGRATIONTIME_2_4MS:
+//            HAL_Delay(3);
+//            break;
+//        case TCS34725_INTEGRATIONTIME_24MS:
+//        	HAL_Delay(24);
+//            break;
+//        case TCS34725_INTEGRATIONTIME_50MS:
+//        	HAL_Delay(50);
+//            break;
+//        case TCS34725_INTEGRATIONTIME_101MS:
+//        	HAL_Delay(101);
+//            break;
+//        case TCS34725_INTEGRATIONTIME_154MS:
+//        	HAL_Delay(154);
+//            break;
+//        case TCS34725_INTEGRATIONTIME_700MS:
+//        	HAL_Delay(700);
+//            break;
 }
 
-void getRGB(float *r, float *g, float *b) {
+void getRGB(uint8_t *r, uint8_t *g, uint8_t *b) {
   uint16_t red, green, blue, clear;
   getRawData(&red, &green, &blue, &clear);
   uint32_t sum = clear;
@@ -287,9 +286,10 @@ void getRGB(float *r, float *g, float *b) {
     return;
   }
 
-  *r = (float)red / sum * 255.0;
-  *g = (float)green / sum * 255.0;
-  *b = (float)blue / sum * 255.0;
+  // Scale the RGB values based on the clear channel and convert to uint8_t (0-255)
+  *r = (uint8_t)((float)red / sum * 255.0);
+  *g = (uint8_t)((float)green / sum * 255.0);
+  *b = (uint8_t)((float)blue / sum * 255.0);
 }
 
 /**************************************************************************/

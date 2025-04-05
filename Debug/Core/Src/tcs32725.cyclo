@@ -8,8 +8,8 @@
 ../Core/Src/tcs32725.c:182:6:tcs32725_begin	2
 ../Core/Src/tcs32725.c:208:6:setIntegrationTime	2
 ../Core/Src/tcs32725.c:226:6:setGain	1
-../Core/Src/tcs32725.c:245:6:getRawData	11
-../Core/Src/tcs32725.c:279:6:getRGB	2
+../Core/Src/tcs32725.c:245:6:getRawData	1
+../Core/Src/tcs32725.c:278:6:getRGB	2
 ../Core/Src/tcs32725.c:301:10:calculateColorTemperature	1
 ../Core/Src/tcs32725.c:334:10:calculateLux	1
 ../Core/Src/tcs32725.c:345:6:setInterrupt	2
