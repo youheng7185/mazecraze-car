@@ -27,25 +27,25 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   ALLOC
  11 .ARM.attributes 00000030  00000000  00000000  000112cc  2**0
                   CONTENTS, READONLY
- 12 .debug_info   00019736  00000000  00000000  000112fc  2**0
+ 12 .debug_info   00019892  00000000  00000000  000112fc  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 13 .debug_abbrev 000042df  00000000  00000000  0002aa32  2**0
+ 13 .debug_abbrev 000042ad  00000000  00000000  0002ab8e  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 14 .debug_aranges 00001678  00000000  00000000  0002ed18  2**3
+ 14 .debug_aranges 00001698  00000000  00000000  0002ee40  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 15 .debug_rnglists 00001145  00000000  00000000  00030390  2**0
+ 15 .debug_rnglists 0000115d  00000000  00000000  000304d8  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 16 .debug_macro  00006688  00000000  00000000  000314d5  2**0
+ 16 .debug_macro  000066a4  00000000  00000000  00031635  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 17 .debug_line   0001c267  00000000  00000000  00037b5d  2**0
+ 17 .debug_line   0001c2de  00000000  00000000  00037cd9  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .debug_str    00095de1  00000000  00000000  00053dc4  2**0
+ 18 .debug_str    00095df5  00000000  00000000  00053fb7  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .comment      00000043  00000000  00000000  000e9ba5  2**0
+ 19 .comment      00000043  00000000  00000000  000e9dac  2**0
                   CONTENTS, READONLY
- 20 .debug_frame  00006fec  00000000  00000000  000e9be8  2**2
+ 20 .debug_frame  0000708c  00000000  00000000  000e9df0  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 21 .debug_line_str 00000069  00000000  00000000  000f0bd4  2**0
+ 21 .debug_line_str 00000069  00000000  00000000  000f0e7c  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -2581,7 +2581,6 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
  80016de:	f44f 5100 	mov.w	r1, #8192	@ 0x2000
  80016e2:	4810      	ldr	r0, [pc, #64]	@ (8001724 <HAL_TIM_PeriodElapsedCallback+0x58>)
  80016e4:	f002 fae7 	bl	8003cb6 <HAL_GPIO_TogglePin>
-    // Select channel for sensor A, then read RGB values
 
     // Select channel for sensor A, then read RGB values
     selectTCAChannel(0);

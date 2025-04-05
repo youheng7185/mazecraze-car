@@ -43,7 +43,7 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ctlreq.h \
  ../Core/Inc/tcs32725.h ../Core/Inc/tca9548.h ../Core/Inc/lsm6dsl_hal.h \
  ../Core/Inc/motor_ll.h ../Core/Inc/vl53l0x.h ../Core/Inc/sh1106.h \
- ../Core/Inc/pf_hal.h
+ ../Core/Inc/pf_hal.h ../Core/Inc/motor_ll.h
 ../Core/Inc/main.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:
 ../Core/Inc/stm32f4xx_hal_conf.h:
@@ -96,3 +96,4 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
 ../Core/Inc/vl53l0x.h:
 ../Core/Inc/sh1106.h:
 ../Core/Inc/pf_hal.h:
+../Core/Inc/motor_ll.h:

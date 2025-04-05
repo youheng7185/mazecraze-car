@@ -1,3 +1,7 @@
 ../Core/Inc/my_print.h:20:20:my_printf	144	static
-../Core/Src/pf_hal.c:11:6:HAL_TIM_PeriodElapsedCallback	16	static
-../Core/Src/pf_hal.c:33:6:printColour	24	static
+../Core/Src/pf_hal.c:13:6:HAL_TIM_PeriodElapsedCallback	16	static
+../Core/Src/pf_hal.c:34:6:printColour	24	static
+../Core/Src/pf_hal.c:39:6:pf_motor_control	16	static
+../Core/Src/pf_hal.c:44:6:pf_motor_set_speed	16	static
+../Core/Src/pf_hal.c:49:6:pf_encoder_get_tick	16	static
+../Core/Src/pf_hal.c:54:6:pf_logging	8	static
