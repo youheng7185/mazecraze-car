@@ -154,12 +154,7 @@ int main(void)
   vl53l0x_init();
   uint16_t range_a = 0, range_b = 0;
 
-  sh1106_init();
-  sh1106_setAll(0);
-  sh1106_sendBuffer();
-  sh1106_print(10, 10, "hello world");
-  sh1106_sendBuffer();
-  lsm6dsl_read_data_polling();
+  //lsm6dsl_read_data_polling();
   /* USER CODE END 2 */
 
   /* Infinite loop */
