@@ -1,7 +1,0 @@
-/home/lapchong/STM32CubeIDE/workspace_1.18.0/mazecrase-car/build/Debug/CMakeFiles/mazecrase-car.dir
-/home/lapchong/STM32CubeIDE/workspace_1.18.0/mazecrase-car/build/Debug/CMakeFiles/edit_cache.dir
-/home/lapchong/STM32CubeIDE/workspace_1.18.0/mazecrase-car/build/Debug/CMakeFiles/rebuild_cache.dir
-/home/lapchong/STM32CubeIDE/workspace_1.18.0/mazecrase-car/build/Debug/cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir
-/home/lapchong/STM32CubeIDE/workspace_1.18.0/mazecrase-car/build/Debug/cmake/stm32cubemx/CMakeFiles/USB_Device_Library.dir
-/home/lapchong/STM32CubeIDE/workspace_1.18.0/mazecrase-car/build/Debug/cmake/stm32cubemx/CMakeFiles/edit_cache.dir
-/home/lapchong/STM32CubeIDE/workspace_1.18.0/mazecrase-car/build/Debug/cmake/stm32cubemx/CMakeFiles/rebuild_cache.dir
