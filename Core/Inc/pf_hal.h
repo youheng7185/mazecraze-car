@@ -3,7 +3,7 @@
 
 #include "motor_ll.h"
 
-void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim);
+//void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim);
 
 typedef struct {
 	uint8_t r;
