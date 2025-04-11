@@ -1,0 +1,17 @@
+# Ignore build output
+/build/
+
+# Ignore CubeIDE workspace files
+*.launch
+*.settings/
+.project
+.cproject
+
+# Ignore temporary files
+*.swp
+*.bak
+*.tmp
+
+# Ignore compiled object files
+*.o
+*.d
